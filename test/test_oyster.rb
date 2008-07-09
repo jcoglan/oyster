@@ -57,6 +57,8 @@ class OysterTest < Test::Unit::TestCase
     opts = @spec.parse %w(--files foo bar baz -u jcoglan)
     assert_equal 'foo, bar, baz', opts[:files].join(', ')
     assert_equal 'jcoglan', opts[:user]
+    opts = @spec.parse %w(--files foo bar baz)
+    assert_equal 'foo, bar, baz', opts[:files].join(', ')
   end
   
 end
