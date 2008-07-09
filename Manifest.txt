@@ -1,0 +1,7 @@
+History.txt
+Manifest.txt
+README.txt
+Rakefile
+bin/oyster
+lib/oyster.rb
+test/test_oyster.rb
