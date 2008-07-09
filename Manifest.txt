@@ -6,4 +6,6 @@ lib/oyster.rb
 lib/oyster/specification.rb
 lib/oyster/option.rb
 lib/oyster/flag_option.rb
+lib/oyster/string_option.rb
+lib/oyster/array_option.rb
 test/test_oyster.rb

@@ -8,7 +8,15 @@ class OysterTest < Test::Unit::TestCase
       flag    :verbose, 'Print verbose output',   :default => true
       string  :user
       string  :binary,  'Which binary to use',    :default => 'ruby'
+      array   :files,   'The files you want to process'
     end
+  end
+  
+  def test_dash_length
+    opts = @spec.parse %w(-user me)
+    assert_equal nil, opts[:user]
+    opts = @spec.parse %w(--u me)
+    assert_equal nil, opts[:user]
   end
   
   def test_flags
@@ -36,6 +44,19 @@ class OysterTest < Test::Unit::TestCase
     assert_equal 'ruby', opts[:binary]
     opts = @spec.parse %w(--binary some_other_prog)
     assert_equal 'some_other_prog', opts[:binary]
+  end
+  
+  def test_string_with_flag
+    opts = @spec.parse %w(the first --user is -v)
+    assert_equal 'the, first', opts[:unclaimed].join(', ')
+    assert_equal 'is', opts[:user]
+    assert_equal true, opts[:verbose]
+  end
+  
+  def test_array
+    opts = @spec.parse %w(--files foo bar baz -u jcoglan)
+    assert_equal 'foo, bar, baz', opts[:files].join(', ')
+    assert_equal 'jcoglan', opts[:user]
   end
   
 end

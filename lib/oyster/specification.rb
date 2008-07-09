@@ -34,7 +34,7 @@ module Oyster
       output = {:unclaimed => []}
       
       while token = input.shift
-        long, short = token.scan(/^--([a-z0-9\-]+)$/i), token.scan(/^-([a-z0-9])$/i)
+        long, short = token.scan(LONG_NAME), token.scan(SHORT_NAME)
         long, short = [long, short].map { |s| s.flatten.first }
         negative = !!(long && long =~ /^no-/)
         long.sub!(/^no-/, '') if negative
