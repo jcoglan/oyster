@@ -11,3 +11,5 @@ end
 
 require File.dirname(__FILE__) + '/oyster/specification'
 require File.dirname(__FILE__) + '/oyster/option'
+require File.dirname(__FILE__) + '/oyster/flag_option'
+require File.dirname(__FILE__) + '/oyster/string_option'

@@ -2,7 +2,9 @@ module Oyster
   class Option
     
     def self.create(type, *args)
-      TYPES[type].new(*args)
+      name = type.to_s.sub(/^(.)/) { |m| m.upcase } + 'Option'
+      klass = Oyster.const_get(name)
+      klass.new(*args)
     end
     
     attr_reader :description
@@ -34,10 +36,3 @@ module Oyster
   end
 end
 
-require File.dirname(__FILE__) + '/flag_option'
-
-module Oyster
-  class Option
-    TYPES = {:flag => FlagOption}
-  end
-end

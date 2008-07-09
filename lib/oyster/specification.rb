@@ -42,10 +42,11 @@ module Oyster
         option = self[long] || self[short]
         output[:unclaimed] << token and next unless option
         
-        output[option.name] = option.is_a?(FlagOption) ? !negative : option.consume(list)
+        output[option.name] = option.is_a?(FlagOption) ? !negative : option.consume(input)
       end
       
       @options.each do |option|
+        next unless output[option.name].nil?
         output[option.name] ||= option.default_value
       end
       
