@@ -23,10 +23,6 @@ module Oyster
       @names.first
     end
     
-    def names
-      @names.map { |name| name.to_s }.sort
-    end
-    
     def alternate(name)
       @names << name.to_sym unless has_name?(name) || name.nil?
     end
@@ -35,6 +31,11 @@ module Oyster
     
     def default_value(value)
       @settings[:default].nil? ? value : @settings[:default]
+    end
+    
+    def help_names
+      @names.map { |name| name.to_s }.sort.map {
+          |name| (name.size > 1 ? '--' : '-') + name }
     end
     
   end

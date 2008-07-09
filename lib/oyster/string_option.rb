@@ -9,6 +9,10 @@ module Oyster
       super(nil)
     end
     
+    def help_names
+      super.map { |name| name + ' ARG' }
+    end
+    
   end
 end
 

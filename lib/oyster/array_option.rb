@@ -11,6 +11,10 @@ module Oyster
       super([])
     end
     
+    def help_names
+      super.map { |name| name + ' ARG1 [ARG2 [...]]' }
+    end
+    
   end
 end
 

@@ -74,7 +74,7 @@ module Oyster
       puts "\nOPTIONS"
       each do |option|
         print ' ' * HELP_INDENT
-        puts option.names.map { |n| (n.size > 1 ? '--' : '-') + n }.join(', ')
+        puts option.help_names.join(', ')
         puts format(option.description, 2) + "\n\n"
       end
       self
