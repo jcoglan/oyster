@@ -1,8 +1,15 @@
 module Oyster
   class Specification
     
+    include Enumerable
+    
     def initialize
       @options = []
+      @name, @synopsis, @description, @notes, @author, @copyright = nil
+    end
+    
+    def each(&block)
+      @options.sort_by { |o| o.name.to_s }.each(&block)
     end
     
     def method_missing(*args)
@@ -10,27 +17,17 @@ module Oyster
       raise "Option name '#{opt.name}' is already used" if has_option?(opt.name)
       opt.alternate(shorthand_for(opt.name))
       @options << opt
-    end
-    
-    def [](name)
-      @options.each do |opt|
-        return opt if opt.has_name?(name)
-      end
-      nil
+    rescue
+      name, value = args[0..1]
+      instance_eval "@#{name} = #{value.inspect}"
     end
     
     def has_option?(name)
       !self[name].nil?
     end
     
-    def shorthand_for(name)
-      initial = name.to_s.scan(/^./).first.downcase
-      initial.upcase! if has_option?(initial)
-      return nil if has_option?(initial)
-      initial
-    end
-    
-    def parse(input = ARGV.dup)
+    def parse(input = ARGV)
+      input = input.dup
       output = {:unclaimed => []}
       
       while token = input.shift
@@ -50,7 +47,66 @@ module Oyster
         output[option.name] ||= option.default_value
       end
       
+      help and raise HelpRendered if output[:help]
       output
+    end
+    
+  private
+    
+    def [](name)
+      @options.each do |opt|
+        return opt if opt.has_name?(name)
+      end
+      nil
+    end
+    
+    def shorthand_for(name)
+      initial = name.to_s.scan(/^./).first.downcase
+      initial.upcase! if has_option?(initial)
+      return nil if has_option?(initial)
+      initial
+    end
+    
+    def help
+      display(@name, 'NAME') if @name
+      display(@synopsis, 'SYNOPSIS', false) if @synopsis
+      display(@description, 'DESCRIPTION') if @description
+      puts "\nOPTIONS"
+      each do |option|
+        print ' ' * HELP_INDENT
+        puts option.names.map { |n| (n.size > 1 ? '--' : '-') + n }.join(', ')
+        puts format(option.description, 2) + "\n\n"
+      end
+      self
+      display(@notes, 'NOTES') if @notes
+      display(@author, 'AUTHOR') if @author
+      display(@copyright, 'COPYRIGHT') if @copyright
+    end
+    
+    def display(text, title, join = true)
+      puts ""
+      puts title if title
+      puts format(text, 1, join)
+    end
+    
+    def format(text, level = 1, join = true)
+      lines   = text.split(/\n/)
+      outdent = lines.inject(1000) { |n,s| [s.scan(/^\s*/).first.size, n].min }
+      indent  = level * HELP_INDENT
+      width   = HELP_WIDTH - indent
+      
+      lines.map { |line|
+        line.sub(/\s*$/, '').sub(%r{^\s{#{outdent}}}, '')
+      }.inject(['']) { |groups, line|
+        groups << '' if line.empty? && !groups.last.empty?
+        buffer = groups.last
+        buffer << (line =~ /^\s+/ || !join ? "\n" : " ") unless buffer.empty?
+        buffer << line
+        groups
+      }.map { |buffer|
+        lines = (buffer =~ /\n/) ? buffer.split(/\n/) : buffer.scan(%r{(.{1,#{width}}\S*)\s*}).flatten
+        lines.map { |l| (' ' * indent) + l }.join("\n")
+      }.join("\n\n")
     end
     
   end

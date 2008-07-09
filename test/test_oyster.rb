@@ -5,11 +5,46 @@ class OysterTest < Test::Unit::TestCase
   
   def setup
     @spec = Oyster.spec do
-      flag    :verbose, 'Print verbose output',   :default => true
+      name      'oyster'
+      synopsis <<-EOS
+      oyster [OPTIONS] filename
+      oyster [-e PATTERN] file1 [, file2 [, file3 [, ...]]]
+      EOS
+      description <<-EOS
+      Oyster is a Ruby command-line option parser that doesn't hate you. It lets
+      you specify options using a simple DSL and parses user input into a hash to
+      match the options your program accepts.
+      
+        class Foo < Option
+          def consume(list); end
+        end
+      
+      Nothing to see here.
+      EOS
+      
+      flag    :verbose, {:default => true},  'Print verbose output'
+      
       string  :user
-      string  :binary,  'Which binary to use',    :default => 'ruby'
-      array   :files,   'The files you want to process'
+      
+      string  :binary,  {:default => 'ruby'}, <<-EOS
+      Which binary to use. You can change the executable used to format the output
+      of this command, setting it to your scripting language of choice. This is just
+      a lot of text to make sure help formatting works.
+      EOS
+      
+      array   :files,   {}, 'The files you want to process'
+      
+      notes <<-EOS
+      This program is free software, distributed under the MIT license.
+      EOS
+      
+      author 'James Coglan <jcoglan@googlemail.com>'
     end
+  end
+  
+  def test_help
+    @spec.parse %w(--help)
+  rescue Oyster::HelpRendered
   end
   
   def test_dash_length

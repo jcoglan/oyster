@@ -9,7 +9,7 @@ module Oyster
     
     attr_reader :description
     
-    def initialize(name, description = '', options = {})
+    def initialize(name, options = {}, description = '')
       @names       = [name.to_sym]
       @description = description
       @settings    = options
@@ -23,8 +23,12 @@ module Oyster
       @names.first
     end
     
+    def names
+      @names.map { |name| name.to_s }.sort
+    end
+    
     def alternate(name)
-      @names << name.to_sym unless has_name?(name) or name.nil?
+      @names << name.to_sym unless has_name?(name) || name.nil?
     end
     
     def consume(list); end
