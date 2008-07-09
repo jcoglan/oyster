@@ -77,10 +77,10 @@ module Oyster
         puts option.help_names.join(', ')
         puts format(option.description, 2) + "\n\n"
       end
-      self
       display(@notes, 'NOTES') if @notes
       display(@author, 'AUTHOR') if @author
       display(@copyright, 'COPYRIGHT') if @copyright
+      self
     end
     
     def display(text, title, join = true)

@@ -22,17 +22,17 @@ class OysterTest < Test::Unit::TestCase
       Nothing to see here.
       EOS
       
-      flag    :verbose, {:default => true},  'Print verbose output'
+      flag    :verbose, :default => true, :desc => 'Print verbose output'
       
       string  :user
       
-      string  :binary,  {:default => 'ruby'}, <<-EOS
+      string  :binary,  :default => 'ruby', :desc => <<-EOS
       Which binary to use. You can change the executable used to format the output
       of this command, setting it to your scripting language of choice. This is just
       a lot of text to make sure help formatting works.
       EOS
       
-      array   :files,   {}, 'The files you want to process'
+      array   :files, :desc => 'The files you want to process'
       
       notes <<-EOS
       This program is free software, distributed under the MIT license.

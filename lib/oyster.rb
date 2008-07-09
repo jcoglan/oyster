@@ -12,7 +12,7 @@ module Oyster
   def self.spec(*args, &block)
     spec = Specification.new
     spec.instance_eval(&block)
-    spec.flag(:help, {:default => false}, 'Displays this help message') unless spec.has_option?(:help)
+    spec.flag(:help, :default => false, :desc => 'Displays this help message') unless spec.has_option?(:help)
     spec
   end
   

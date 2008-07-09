@@ -9,9 +9,9 @@ module Oyster
     
     attr_reader :description
     
-    def initialize(name, options = {}, description = '')
+    def initialize(name, options = {})
       @names       = [name.to_sym]
-      @description = description
+      @description = options[:desc] || ''
       @settings    = options
     end
     
