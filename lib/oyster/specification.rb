@@ -91,26 +91,25 @@ module Oyster
     end
     
     def help
-      display(@data[:name], 'NAME')
-      display(@data[:synopsis], 'SYNOPSIS', false)
-      display(@data[:description], 'DESCRIPTION')
+      display(@data[:name],         1, 'NAME')
+      display(@data[:synopsis],     1, 'SYNOPSIS', false)
+      display(@data[:description],  1, 'DESCRIPTION')
       puts "\nOPTIONS"
       each do |option|
-        print ' ' * HELP_INDENT
-        puts option.help_names.join(', ')
-        puts format(option.description, 2) + "\n\n"
+        display(option.help_names.join(', '), 1)
+        display(option.description, 2)
+        puts "\n"
       end
-      display(@data[:notes], 'NOTES')
-      display(@data[:author], 'AUTHOR')
-      display(@data[:copyright], 'COPYRIGHT')
+      display(@data[:notes],        1, 'NOTES')
+      display(@data[:author],       1, 'AUTHOR')
+      display(@data[:copyright],    1, 'COPYRIGHT')
       self
     end
     
-    def display(text, title, join = true)
+    def display(text, level = 1, title = nil, join = true)
       return unless text
-      puts ""
-      puts title if title
-      puts format(text, 1, join)
+      puts "\n" + format(title, level - 1) if title
+      puts format(text, level, join)
     end
     
     def format(text, level = 1, join = true)
