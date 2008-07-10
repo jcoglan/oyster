@@ -71,22 +71,23 @@ module Oyster
     end
     
     def help
-      display(@name, 'NAME') if @name
-      display(@synopsis, 'SYNOPSIS', false) if @synopsis
-      display(@description, 'DESCRIPTION') if @description
+      display(@name, 'NAME')
+      display(@synopsis, 'SYNOPSIS', false)
+      display(@description, 'DESCRIPTION')
       puts "\nOPTIONS"
       each do |option|
         print ' ' * HELP_INDENT
         puts option.help_names.join(', ')
         puts format(option.description, 2) + "\n\n"
       end
-      display(@notes, 'NOTES') if @notes
-      display(@author, 'AUTHOR') if @author
-      display(@copyright, 'COPYRIGHT') if @copyright
+      display(@notes, 'NOTES')
+      display(@author, 'AUTHOR')
+      display(@copyright, 'COPYRIGHT')
       self
     end
     
     def display(text, title, join = true)
+      return unless text
       puts ""
       puts title if title
       puts format(text, 1, join)
