@@ -5,7 +5,7 @@ module Oyster
   SHORT_NAME  = /^-([a-z0-9]+)$/i
   
   HELP_INDENT = 7
-  HELP_WIDTH  = 72
+  HELP_WIDTH  = 80
   
   class HelpRendered < StandardError; end
   
@@ -26,3 +26,4 @@ require File.dirname(__FILE__) + '/oyster/option'
 require File.dirname(__FILE__) + '/oyster/flag_option'
 require File.dirname(__FILE__) + '/oyster/string_option'
 require File.dirname(__FILE__) + '/oyster/array_option'
+require File.dirname(__FILE__) + '/oyster/shortcut_option'

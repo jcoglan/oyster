@@ -25,6 +25,10 @@ class OysterTest < Test::Unit::TestCase
       flag    :verbose, :default => true,  :desc => 'Print verbose output'
       flag    :all,     :default => false, :desc => 'Include all files?'
       
+      shortcut :woop,   '--verbose --all --files'
+      
+      string  :k,       :default => 'Its short', :desc => 'Just a little string'
+      
       string  :user
       
       string  :binary,  :default => 'ruby', :desc => <<-EOS
@@ -74,6 +78,14 @@ class OysterTest < Test::Unit::TestCase
     assert_equal 'jcoglan', opts[:user]
   end
   
+  def test_shortcuts
+    opts = @spec.parse %w(-u little-old-me --woop help.txt cmd.rb)
+    assert_equal 'little-old-me', opts[:user]
+    assert_equal true, opts[:verbose]
+    assert_equal true, opts[:all]
+    assert_equal 'help.txt, cmd.rb', opts[:files].join(', ')
+  end
+  
   def test_strings
     opts = @spec.parse %w(-v --user jcoglan something)
     assert_equal 'jcoglan', opts[:user]
@@ -87,6 +99,11 @@ class OysterTest < Test::Unit::TestCase
     assert_equal 'ruby', opts[:binary]
     opts = @spec.parse %w(--binary some_other_prog)
     assert_equal 'some_other_prog', opts[:binary]
+  end
+  
+  def test_single_letter_option
+    opts = @spec.parse %w(-k so-whats-up)
+    assert_equal 'so-whats-up', opts[:k]
   end
   
   def test_string_with_flag

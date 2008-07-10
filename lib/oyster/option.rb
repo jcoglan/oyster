@@ -29,7 +29,7 @@ module Oyster
     
     def consume(list); end
     
-    def default_value(value)
+    def default_value(value = nil)
       @settings[:default].nil? ? value : @settings[:default]
     end
     
