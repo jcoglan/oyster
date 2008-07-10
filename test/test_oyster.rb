@@ -22,7 +22,8 @@ class OysterTest < Test::Unit::TestCase
       Nothing to see here.
       EOS
       
-      flag    :verbose, :default => true, :desc => 'Print verbose output'
+      flag    :verbose, :default => true,  :desc => 'Print verbose output'
+      flag    :all,     :default => false, :desc => 'Include all files?'
       
       string  :user
       
@@ -49,7 +50,7 @@ class OysterTest < Test::Unit::TestCase
   
   def test_dash_length
     opts = @spec.parse %w(-user me)
-    assert_equal nil, opts[:user]
+    assert_equal '-s', opts[:user]
     opts = @spec.parse %w(--u me)
     assert_equal nil, opts[:user]
   end
@@ -64,6 +65,13 @@ class OysterTest < Test::Unit::TestCase
     assert_equal false, opts[:verbose]
     
     assert_equal false, opts[:help]
+  end
+  
+  def test_shorthand_flags
+    opts = @spec.parse %w(something -vau jcoglan)
+    assert_equal true, opts[:verbose]
+    assert_equal true, opts[:all]
+    assert_equal 'jcoglan', opts[:user]
   end
   
   def test_strings

@@ -33,6 +33,9 @@ module Oyster
       while token = input.shift
         long, short = token.scan(LONG_NAME), token.scan(SHORT_NAME)
         long, short = [long, short].map { |s| s.flatten.first }
+        
+        input = short.scan(/./).map { |s| "-#{s}" } + input and next if short and short.size > 1
+        
         negative = !!(long && long =~ /^no-/)
         long.sub!(/^no-/, '') if negative
         
