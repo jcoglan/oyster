@@ -4,9 +4,9 @@ module Oyster
     include Enumerable
     
     def initialize
-      @options = []
+      @options     = []
       @subcommands = []
-      @name, @synopsis, @description, @notes, @author, @copyright = nil
+      @data        = {}
     end
     
     def each(&block)
@@ -20,7 +20,7 @@ module Oyster
       @options << opt
     rescue
       name, value = args[0..1]
-      instance_eval "@#{name} = #{value.inspect}"
+      @data[name.to_sym] = value.to_s
     end
     
     def subcommand(name, &block)
@@ -91,18 +91,18 @@ module Oyster
     end
     
     def help
-      display(@name, 'NAME')
-      display(@synopsis, 'SYNOPSIS', false)
-      display(@description, 'DESCRIPTION')
+      display(@data[:name], 'NAME')
+      display(@data[:synopsis], 'SYNOPSIS', false)
+      display(@data[:description], 'DESCRIPTION')
       puts "\nOPTIONS"
       each do |option|
         print ' ' * HELP_INDENT
         puts option.help_names.join(', ')
         puts format(option.description, 2) + "\n\n"
       end
-      display(@notes, 'NOTES')
-      display(@author, 'AUTHOR')
-      display(@copyright, 'COPYRIGHT')
+      display(@data[:notes], 'NOTES')
+      display(@data[:author], 'AUTHOR')
+      display(@data[:copyright], 'COPYRIGHT')
       self
     end
     
