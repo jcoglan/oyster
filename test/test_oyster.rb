@@ -44,6 +44,24 @@ class OysterTest < Test::Unit::TestCase
       EOS
       
       author 'James Coglan <jcoglan@googlemail.com>'
+      
+      subcommand :add do
+        name 'oyster-add'
+        synopsis <<-EOS
+        oyster add [--squash] file1 [file2 [...]]
+        EOS
+        description <<-EOS
+        oyster-add is a subcommand of oyster. This text is here
+        to test subcommand recognition so it probably doesn't
+        matter much what it says, as long it's long enough to
+        wrap to a few lines and it lets us tell commands apart.
+        EOS
+        flag :squash, :desc => 'Squashes all the files into one string'
+        
+        subcommand :nothing do
+          flag  :something
+        end
+      end
     end
   end
   
@@ -119,6 +137,21 @@ class OysterTest < Test::Unit::TestCase
     assert_equal 'jcoglan', opts[:user]
     opts = @spec.parse %w(--files foo bar baz)
     assert_equal 'foo, bar, baz', opts[:files].join(', ')
+  end
+  
+  def test_subcommands
+    opts = @spec.parse %w(-v add --help)
+  rescue Oyster::HelpRendered
+    opts = @spec.parse %w(-v --user someguy thingy add -s arg1 arg2)
+    assert_equal true, opts[:verbose]
+    assert_equal 'someguy', opts[:user]
+    assert_equal 'thingy', opts[:unclaimed].join(', ')
+    assert_equal true, opts[:add][:squash]
+    assert_equal 'arg1, arg2', opts[:add][:unclaimed].join(', ')
+    opts = @spec.parse %w(-v add nothing -s)
+    assert_equal true, opts[:verbose]
+    assert_equal false, opts[:add][:squash]
+    assert_equal true, opts[:add][:nothing][:something]
   end
   
 end

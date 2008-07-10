@@ -8,4 +8,6 @@ lib/oyster/option.rb
 lib/oyster/flag_option.rb
 lib/oyster/string_option.rb
 lib/oyster/array_option.rb
+lib/oyster/shortcut_option.rb
+lib/oyster/subcommand_option.rb
 test/test_oyster.rb

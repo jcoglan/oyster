@@ -5,6 +5,7 @@ module Oyster
     
     def initialize
       @options = []
+      @subcommands = []
       @name, @synopsis, @description, @notes, @author, @copyright = nil
     end
     
@@ -22,8 +23,25 @@ module Oyster
       instance_eval "@#{name} = #{value.inspect}"
     end
     
+    def subcommand(name, &block)
+      opt = SubcommandOption.new(name, Oyster.spec(&block))
+      raise "Subcommand name '#{opt.name}' is already used" if has_command?(name)
+      @subcommands << opt
+    end
+    
     def has_option?(name)
       !self[name].nil?
+    end
+    
+    def has_command?(name)
+      !command(name).nil?
+    end
+    
+    def command(name)
+      @subcommands.each do |command|
+        return command if command.has_name?(name)
+      end
+      nil
     end
     
     def parse(input = ARGV)
@@ -31,6 +49,8 @@ module Oyster
       output = {:unclaimed => []}
       
       while token = input.shift
+        option = command(token)
+        
         long, short = token.scan(LONG_NAME), token.scan(SHORT_NAME)
         long, short = [long, short].map { |s| s.flatten.first }
         
@@ -39,7 +59,7 @@ module Oyster
         negative = !!(long && long =~ /^no-/)
         long.sub!(/^no-/, '') if negative
         
-        option = self[long] || self[short]
+        option ||= self[long] || self[short]
         output[:unclaimed] << token and next unless option
         
         output[option.name] = option.is_a?(FlagOption) ? !negative : option.consume(input)
