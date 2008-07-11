@@ -56,6 +56,9 @@ class OysterTest < Test::Unit::TestCase
         matter much what it says, as long it's long enough to
         wrap to a few lines and it lets us tell commands apart.
         EOS
+        
+        glob :filelist
+        
         flag :squash, :desc => 'Squashes all the files into one string'
         
         subcommand :nothing do
@@ -139,6 +142,11 @@ class OysterTest < Test::Unit::TestCase
     assert_equal 'jcoglan', opts[:user]
     opts = @spec.parse %w(--files foo bar baz)
     assert_equal 'foo, bar, baz', opts[:files].join(', ')
+  end
+  
+  def test_globs
+    opts = @spec.parse %w(add --filelist ./*.txt)
+    assert_equal './History.txt, ./Manifest.txt, ./README.txt', opts[:add][:filelist].sort.join(', ')
   end
   
   def test_subcommands
