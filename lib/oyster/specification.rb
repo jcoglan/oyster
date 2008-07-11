@@ -17,7 +17,13 @@ module Oyster
       opt = Option.create(*args)
       raise "Option name '#{opt.name}' is already used" if has_option?(opt.name)
       opt.alternate(shorthand_for(opt.name))
+      
       @options << opt
+      
+      if opt.is_a?(FlagOption) and opt.default_value
+        anti_opt = FlagOption.new("no-#{opt.name}", :default => !opt.default_value, :desc => "Opposite of --#{opt.name}")
+        @options << anti_opt
+      end
     rescue
       name, value = args[0..1]
       @data[name.to_sym] = value.to_s

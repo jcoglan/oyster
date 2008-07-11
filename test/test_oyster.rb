@@ -78,6 +78,8 @@ class OysterTest < Test::Unit::TestCase
   end
   
   def test_flags
+    opts = @spec.parse %w(myfile.txt)
+    assert_equal true, opts[:verbose]
     opts = @spec.parse %w(myfile.txt --verbose)
     assert_equal true, opts[:verbose]
     assert_equal 'myfile.txt', opts[:unclaimed].first

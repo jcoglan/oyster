@@ -8,6 +8,10 @@ module Oyster
       super(false)
     end
     
+    def description
+      super + (default_value ? ' (This is the default)' : '')
+    end
+    
   end
 end
 
