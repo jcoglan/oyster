@@ -39,6 +39,8 @@ class OysterTest < Test::Unit::TestCase
       
       array   :files, :desc => 'The files you want to process'
       
+      file    :path,  :desc => 'Path to read program input from'
+      
       notes <<-EOS
       This program is free software, distributed under the MIT license.
       EOS
@@ -162,6 +164,11 @@ class OysterTest < Test::Unit::TestCase
     assert_equal true, opts[:verbose]
     assert_equal false, opts[:add][:squash]
     assert_equal true, opts[:add][:nothing][:something]
+  end
+  
+  def test_file
+    opts = @spec.parse %w(--path Rakefile)
+    assert opts[:path] =~ /Oyster::VERSION/
   end
   
 end

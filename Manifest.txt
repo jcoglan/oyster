@@ -7,6 +7,7 @@ lib/oyster/specification.rb
 lib/oyster/option.rb
 lib/oyster/flag_option.rb
 lib/oyster/string_option.rb
+lib/oyster/file_option.rb
 lib/oyster/array_option.rb
 lib/oyster/glob_option.rb
 lib/oyster/shortcut_option.rb
