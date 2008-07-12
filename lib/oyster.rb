@@ -5,7 +5,7 @@ module Oyster
   SHORT_NAME  = /^-([a-z0-9]+)$/i
   
   HELP_INDENT = 7
-  HELP_WIDTH  = 80
+  HELP_WIDTH  = 72
   
   class HelpRendered < StandardError; end
   
