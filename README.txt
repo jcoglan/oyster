@@ -106,6 +106,70 @@ as specified by the user. For example:
   Output:   opts[:sources] == ['foo', 'bar', 'baz']
             opts[:dest] == 'somewhere'
 
+Options specified as +file+ options will take the input and read the contents of
+the specified file. Use this option if you want to take input from files without
+knowing the name of the file itself:
+
+  Input:    --exec myscript.sh
+  Output:   opts[:exec] == '(contents of myscript.sh)'
+
+If you have a +glob+ option, it will expand its input using <tt>Dir.glob</tt>.
+You must quote your input for this to work, otherwise the shell will expand the
+glob before handing it to the Ruby interpreter.
+
+  Input:    -f **/*.rb
+  Output:   ARGV == ['-f', 'foo.rb', 'bar.rb']
+            -- Oyster will call Dir.glob('foo.rb')
+               opts[:files] == ['foo.rb']
+  
+  Input:    -f '**/*.rb'
+  Output:   ARGV == ['-f', '**/*.rb']
+            -- Oyster will call Dir.glob('**/*.rb')
+               opts[:files] == ['foo.rb', 'bar.rb', 'dir/baz.rb', ...]
+
+=== Unclaimed input
+
+Any input tokens not absorbed by one of the option flags will be written to an
+array in <tt>opts[:unclaimed]</tt>:
+
+  Input:    -s foo.rb bar.rb -d /path/to/dir some_arg
+  Output:   opts[:sources] == ['foo.rb', 'bar.rb']
+            opts[:dest] == '/path/to/dir'
+            opts[:unclaimed] == ['some_arg']
+
+=== Subcommands
+
+You can easily create subcommands by nesting specs inside the main one:
+
+  # Main program spec
+  spec = Oyster.spec do
+    # Front matter
+    name    'someprog'
+    
+    # Options
+    flag    :verbose,   :default => true
+    
+    # Subcommand 'add'
+    subcommand :add do
+      name    'someprog-add'
+      flag    :force,   :default => false
+    end
+  end
+
+Subcommand options are stored as a hash inside the main options hash:
+  
+  Input:    --no-verbose
+  Output:   opts == {:verbose => false}
+  
+  Input:    -v add -f
+  Output:   opts == {:verbose => true, :add => {:force => true}}
+  
+  Input:    add --help
+  Output:   prints help for 'add' command only
+
+Beware that you cannot give a subcommand the same name as an option flag,
+otherwise you'll get a name collision in the output.
+
 === Requirements
 
 * Rubygems
