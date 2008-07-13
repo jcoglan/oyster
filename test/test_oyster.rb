@@ -148,7 +148,7 @@ class OysterTest < Test::Unit::TestCase
   
   def test_globs
     opts = @spec.parse %w(add --filelist ./*.txt)
-    assert_equal './History.txt, ./Manifest.txt, ./README.txt', opts[:add][:filelist].sort.join(', ')
+    assert_equal './History.txt, ./Manifest.txt', opts[:add][:filelist].sort.join(', ')
   end
   
   def test_subcommands
