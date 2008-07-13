@@ -37,6 +37,12 @@ class OysterTest < Test::Unit::TestCase
       a lot of text to make sure help formatting works.
       EOS
       
+      integer :status,    :default => 200,
+      :desc => 'Tell the program the status code to return'
+      
+      float   :quality,   :default => 0.5,
+      :desc => 'Level of compression loss incurred when copying'
+      
       array   :files, :desc => 'The files you want to process'
       
       file    :path,  :desc => 'Path to read program input from'
@@ -136,6 +142,14 @@ class OysterTest < Test::Unit::TestCase
     assert_equal 'the, first', opts[:unclaimed].join(', ')
     assert_equal 'is', opts[:user]
     assert_equal true, opts[:verbose]
+  end
+  
+  def test_numerics
+    opts = @spec.parse %w(-q 0.99 --status 20.4)
+    assert_equal 0.99, opts[:quality]
+    assert Float === opts[:quality]
+    assert_equal 20, opts[:status]
+    assert Integer === opts[:status]
   end
   
   def test_array

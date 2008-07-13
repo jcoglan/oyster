@@ -5,8 +5,8 @@ module Oyster
       list.shift
     end
     
-    def default_value
-      super(nil)
+    def default_value(value = nil)
+      super(value || nil)
     end
     
     def help_names

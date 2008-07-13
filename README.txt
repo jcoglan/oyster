@@ -53,6 +53,12 @@ are required.
     string  :type,      :default => 'f',
     :desc => 'Which type of files to move'
     
+    integer :status,    :default => 200,
+    :desc => 'Tell the program the status code to return'
+    
+    float   :quality,   :default => 0.5,
+    :desc => 'Level of compression loss incurred when copying'
+    
     glob    :files,     :desc => <<-EOS
     Pattern for selecting which files to move. For example, to select all the
     JavaScript files, you might use:
@@ -101,6 +107,9 @@ as specified by the user. For example:
   
   Input:    --dest /path/to/mydir
   Output:   opts[:dest] == '/path/to/mydir'
+  
+  Input:    -q 0.7
+  Output:   opts[:quality] == 0.7
   
   Input:    --sources foo bar baz -d somewhere
   Output:   opts[:sources] == ['foo', 'bar', 'baz']

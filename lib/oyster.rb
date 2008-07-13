@@ -21,12 +21,18 @@ module Oyster
   end
 end
 
-require File.dirname(__FILE__) + '/oyster/specification'
-require File.dirname(__FILE__) + '/oyster/option'
-require File.dirname(__FILE__) + '/oyster/flag_option'
-require File.dirname(__FILE__) + '/oyster/string_option'
-require File.dirname(__FILE__) + '/oyster/file_option'
-require File.dirname(__FILE__) + '/oyster/array_option'
-require File.dirname(__FILE__) + '/oyster/glob_option'
-require File.dirname(__FILE__) + '/oyster/shortcut_option'
-require File.dirname(__FILE__) + '/oyster/subcommand_option'
+[ 'specification',
+  'option',
+  'options/flag',
+  'options/string',
+  'options/integer',
+  'options/float',
+  'options/file',
+  'options/array',
+  'options/glob',
+  'options/shortcut',
+  'options/subcommand'
+].each do |file|
+  require File.dirname(__FILE__) + '/oyster/' + file
+end
+
