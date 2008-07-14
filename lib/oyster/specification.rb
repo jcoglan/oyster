@@ -92,11 +92,11 @@ module Oyster
     
     def help
       display(@data[:name],         1, 'NAME')
-      display(@data[:synopsis],     1, 'SYNOPSIS', false)
+      display(@data[:synopsis],     1, 'SYNOPSIS', false, true)
       display(@data[:description],  1, 'DESCRIPTION')
-      puts "\nOPTIONS"
+      puts "\n\e[1mOPTIONS\e[0m"
       each do |option|
-        display(option.help_names.join(', '), 1)
+        display(option.help_names.join(', '), 1, nil, false, true)
         display(option.description, 2)
         puts "\n"
       end
@@ -106,9 +106,10 @@ module Oyster
       self
     end
     
-    def display(text, level = 1, title = nil, join = true)
+    def display(text, level = 1, title = nil, join = true, man = false)
       return unless text
-      puts "\n" + format(title, level - 1) if title
+      puts "\n" + format("\e[1m#{ title }\e[0m", level - 1) if title
+      text = man_format(text) if man
       puts format(text, level, join)
     end
     
@@ -127,9 +128,16 @@ module Oyster
         buffer << line
         groups
       }.map { |buffer|
-        lines = (buffer =~ /\n/) ? buffer.split(/\n/) : buffer.scan(%r{(.{1,#{width}}\S*)\s*}).flatten
+        lines = (buffer =~ /\n/) ?
+            buffer.split(/\n/) :
+            buffer.scan(%r{((?:.(?:\e\[\dm)?){1,#{width}}\S*)\s*}).flatten
         lines.map { |l| (' ' * indent) + l }.join("\n")
       }.join("\n\n")
+    end
+    
+    def man_format(text)
+      text.gsub(/[a-z][a-z0-9]*/) { |word| "\e[1m#{ word }\e[0m" }.
+           gsub(/[A-Z][A-Z0-9\_\-]*/) { |word| "\e[4m#{ word }\e[0m" }
     end
     
   end
