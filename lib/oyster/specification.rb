@@ -94,7 +94,7 @@ module Oyster
       display(@data[:name],         1, 'NAME')
       display(@data[:synopsis],     1, 'SYNOPSIS', false, true)
       display(@data[:description],  1, 'DESCRIPTION')
-      puts "\n\e[1mOPTIONS\e[0m"
+      puts "\n#{ bold }OPTIONS#{ normal }"
       each do |option|
         display(option.help_names.join(', '), 1, nil, false, true)
         display(option.description, 2)
@@ -108,7 +108,7 @@ module Oyster
     
     def display(text, level = 1, title = nil, join = true, man = false)
       return unless text
-      puts "\n" + format("\e[1m#{ title }\e[0m", level - 1) if title
+      puts "\n" + format("#{ bold }#{ title }#{ normal }", level - 1) if title
       text = man_format(text) if man
       puts format(text, level, join)
     end
@@ -136,8 +136,20 @@ module Oyster
     end
     
     def man_format(text)
-      text.gsub(/[a-z][a-z0-9]*/) { |word| "\e[1m#{ word }\e[0m" }.
-           gsub(/[A-Z][A-Z0-9\_\-]*/) { |word| "\e[4m#{ word }\e[0m" }
+      text.gsub(/[a-z][a-z0-9]*/) { |word| "#{ bold }#{ word }#{ normal }" }.
+           gsub(/[A-Z][A-Z0-9\_\-]*/) { |word| "#{ underline }#{ word }#{ normal }" }
+    end
+    
+    def bold
+      WINDOWS ? "" : "\e[1m"
+    end
+    
+    def underline
+      WINDOWS ? "" : "\e[4m"
+    end
+    
+    def normal
+      WINDOWS ? "" : "\e[0m"
     end
     
   end

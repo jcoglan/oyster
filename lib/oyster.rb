@@ -7,6 +7,8 @@ module Oyster
   HELP_INDENT = 7
   HELP_WIDTH  = 72
   
+  WINDOWS = RUBY_PLATFORM.split('-').any? { |part| part =~ /mswin\d*/i }
+  
   class HelpRendered < StandardError; end
   
   def self.spec(*args, &block)
