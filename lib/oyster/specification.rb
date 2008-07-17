@@ -49,6 +49,11 @@ module Oyster
       output = {:unclaimed => []}
       
       while token = input.shift
+        if token == '--'
+          output[:unclaimed] = output[:unclaimed] + input
+          break
+        end
+        
         option = command(token)
         
         long, short = token.scan(LONG_NAME), token.scan(SHORT_NAME)

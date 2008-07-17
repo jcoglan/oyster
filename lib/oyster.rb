@@ -19,7 +19,7 @@ module Oyster
   end
   
   def self.is_name?(string)
-    !string.nil? and !!(string =~ LONG_NAME || string =~ SHORT_NAME)
+    !string.nil? and !!(string =~ LONG_NAME || string =~ SHORT_NAME || string == '--')
   end
 end
 

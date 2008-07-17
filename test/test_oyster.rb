@@ -160,6 +160,12 @@ class OysterTest < Test::Unit::TestCase
     assert_equal 'foo, bar, baz', opts[:files].join(', ')
   end
   
+  def test_stop_parsing
+    opts = @spec.parse %w(--files something.txt my.rb -- some more args)
+    assert_equal 'something.txt, my.rb', opts[:files].join(', ')
+    assert_equal 'some more args', opts[:unclaimed].join(' ')
+  end
+  
   def test_globs
     opts = @spec.parse %w(add --filelist ./*.txt)
     assert_equal './History.txt, ./Manifest.txt, ./README.txt', opts[:add][:filelist].sort.join(', ')
