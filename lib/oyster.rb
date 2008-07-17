@@ -1,7 +1,7 @@
 module Oyster
   VERSION = '0.9.0'
   
-  LONG_NAME   = /^--([a-z][a-z0-9\-]+)$/i
+  LONG_NAME   = /^--([a-z\[][a-z0-9\]\-]+)$/i
   SHORT_NAME  = /^-([a-z0-9]+)$/i
   
   HELP_INDENT = 7

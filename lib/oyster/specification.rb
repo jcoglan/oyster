@@ -135,14 +135,22 @@ module Oyster
       }.map { |buffer|
         lines = (buffer =~ /\n/) ?
             buffer.split(/\n/) :
-            buffer.scan(%r{((?:.(?:\e\[\dm)?){1,#{width}}\S*)\s*}).flatten
+            buffer.scan(%r{((?:.(?:\e\[\dm)*){1,#{width}}\S*)\s*}).flatten
         lines.map { |l| (' ' * indent) + l }.join("\n")
       }.join("\n\n")
     end
     
     def man_format(text)
-      text.gsub(/[a-z][a-z0-9]*/) { |word| "#{ bold }#{ word }#{ normal }" }.
-           gsub(/[A-Z][A-Z0-9\_\-]*/) { |word| "#{ underline }#{ word }#{ normal }" }
+      text.split(/\n/).map { |line|
+        " #{line}".scan(/(.+?)([a-z0-9\-\_]*)/i).flatten.map { |token|
+          formatter = case true
+            when Oyster.is_name?(token)                      :  bold
+            when token =~ /[A-Z]/ && token.upcase == token   :  underline
+            when token =~ /[a-z]/ && token.downcase == token :  bold
+          end
+          "#{ formatter }#{ token }#{ normal }"
+        }.join('')
+      }.join("\n")
     end
     
     def bold
