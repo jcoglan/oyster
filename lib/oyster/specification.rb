@@ -148,7 +148,7 @@ module Oyster
             when token =~ /[A-Z]/ && token.upcase == token   :  underline
             when token =~ /[a-z]/ && token.downcase == token :  bold
           end
-          "#{ formatter }#{ token }#{ normal }"
+          formatter ? "#{ formatter }#{ token }#{ normal }" : token
         }.join('')
       }.join("\n")
     end
