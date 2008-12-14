@@ -144,9 +144,9 @@ module Oyster
       text.split(/\n/).map { |line|
         " #{line}".scan(/(.+?)([a-z0-9\-\_]*)/i).flatten.map { |token|
           formatter = case true
-            when Oyster.is_name?(token)                      :  bold
-            when token =~ /[A-Z]/ && token.upcase == token   :  underline
-            when token =~ /[a-z]/ && token.downcase == token :  bold
+            when Oyster.is_name?(token)                      then  bold
+            when token =~ /[A-Z]/ && token.upcase == token   then  underline
+            when token =~ /[a-z]/ && token.downcase == token then  bold
           end
           formatter ? "#{ formatter }#{ token }#{ normal }" : token
         }.join('')
