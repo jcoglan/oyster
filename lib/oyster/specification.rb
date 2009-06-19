@@ -49,7 +49,7 @@ module Oyster
       output = {:unclaimed => []}
       
       while token = input.shift
-        if token == '--'
+        if token == STOP_FLAG
           output[:unclaimed] = output[:unclaimed] + input
           break
         end
@@ -61,8 +61,8 @@ module Oyster
         
         input = short.scan(/./).map { |s| "-#{s}" } + input and next if short and short.size > 1
         
-        negative = !!(long && long =~ /^no-/)
-        long.sub!(/^no-/, '') if negative
+        negative = !!(long && long =~ NEGATOR)
+        long.sub!(NEGATOR, '') if negative
         
         option ||= self[long] || self[short]
         output[:unclaimed] << token and next unless option
@@ -95,34 +95,53 @@ module Oyster
       initial
     end
     
-    def help
-      display(@data[:name],         1, 'NAME')
-      display(@data[:synopsis],     1, 'SYNOPSIS', false, true)
-      display(@data[:description],  1, 'DESCRIPTION')
-      puts "\n#{ bold }OPTIONS#{ normal }"
+    def help(stream = $stdout)
+      render(stream, @data[:name],         1, 'NAME')
+      render(stream, @data[:synopsis],     1, 'SYNOPSIS', false, true)
+      render(stream, @data[:description],  1, 'DESCRIPTION')
+      
+      i = 0
+      stream.puts "\n#{ bold }OPTIONS#{ normal }"
       each do |option|
-        display(option.help_names.join(', '), 1, nil, false, true)
-        display(option.description, 2)
-        puts "\n"
+        render(stream, option.help_names.join(', '), 1, nil, false, true)
+        render(stream, option.description, 2)
+        i += 1
+        stream.puts "\n" if i < @options.size
       end
-      display(@data[:notes],        1, 'NOTES')
-      display(@data[:author],       1, 'AUTHOR')
-      display(@data[:copyright],    1, 'COPYRIGHT')
+      
+      render(stream, @data[:notes],        1, 'NOTES')
+      render(stream, @data[:author],       1, 'AUTHOR')
+      render(stream, @data[:copyright],    1, 'COPYRIGHT')
+      stream.puts "\n"
       self
     end
     
-    def display(text, level = 1, title = nil, join = true, man = false)
+    # Plagiarised from Trollop, Copyright (c) 2008 William Morgan
+    def display_width
+      @width ||= begin
+                   require 'curses'
+                   Curses.init_screen
+                   x = Curses.cols
+                   Curses.close_screen
+                   x
+                 rescue
+                   HELP_WIDTH
+                 end
+      @width - HELP_INDENT
+    end
+    
+    def render(stream, text, level = 1, title = nil, join = true, man = false)
       return unless text
-      puts "\n" + format("#{ bold }#{ title }#{ normal }", level - 1) if title
+      stream.puts "\n" + format("#{ normal }#{ bold }#{ title }#{ normal }", level - 1) if title
       text = man_format(text) if man
-      puts format(text, level, join)
+      stream.puts format(text, level, join)
     end
     
     def format(text, level = 1, join = true)
       lines   = text.split(/\n/)
       outdent = lines.inject(1000) { |n,s| [s.scan(/^\s*/).first.size, n].min }
       indent  = level * HELP_INDENT
-      width   = HELP_WIDTH - indent
+      width   = display_width - indent
       
       lines.map { |line|
         line.sub(/\s*$/, '').sub(%r{^\s{#{outdent}}}, '')

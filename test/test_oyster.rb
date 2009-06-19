@@ -35,6 +35,13 @@ class OysterTest < Test::Unit::TestCase
       Which binary to use. You can change the executable used to format the output
       of this command, setting it to your scripting language of choice. This is just
       a lot of text to make sure help formatting works.
+      
+        class WeCan
+          attr_writer :write_code
+          
+          def in_option_descriptions
+          end
+        end
       EOS
       
       integer :status,    :default => 200,

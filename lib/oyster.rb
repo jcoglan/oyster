@@ -1,11 +1,14 @@
 module Oyster
-  VERSION = '0.9.1'
+  VERSION = '0.9.2'
   
   LONG_NAME   = /^--([a-z\[][a-z0-9\]\-]+)$/i
   SHORT_NAME  = /^-([a-z0-9]+)$/i
   
   HELP_INDENT = 7
-  HELP_WIDTH  = 72
+  HELP_WIDTH  = 80
+  
+  STOP_FLAG   = '--'
+  NEGATOR     = /^no-/
   
   WINDOWS = RUBY_PLATFORM.split('-').any? { |part| part =~ /mswin\d*/i }
   
@@ -19,7 +22,7 @@ module Oyster
   end
   
   def self.is_name?(string)
-    !string.nil? and !!(string =~ LONG_NAME || string =~ SHORT_NAME || string == '--')
+    !string.nil? and !!(string =~ LONG_NAME || string =~ SHORT_NAME || string == STOP_FLAG)
   end
 end
 
