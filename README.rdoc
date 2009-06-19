@@ -1,18 +1,22 @@
 = Oyster
 
-http://github.com/jcoglan/oyster
-
-=== Description
+* http://github.com/jcoglan/oyster
 
 Oyster is a command-line input parser that doesn't hate you. It provides a simple
 API that you use to write a spec for the user interface to your program, and it
 handles mapping the input to a hash for you. It supports both long and short option
 names, subcommands, and various types of input data.
 
+
+=== Installation
+
+  sudo gem install oyster
+
+
 === Features
 
 * Parses command line options into a hash for easy access
-* Supports long (--example) and short (-e) names, including compound (-zxvf) short options
+* Supports long (<tt>--example</tt>) and short (<tt>-e</tt>) names, including compound (<tt>-zxvf</tt>) short options
 * Supports subcommand recognition
 * Can parse options as booleans, strings, arrays, files, globs
 * Automatically handles single-letter shortcuts for option names
@@ -20,12 +24,13 @@ names, subcommands, and various types of input data.
 * Is easily extensible to support custom input types
 * Automatically outputs man-page-style help for your program
 
+
 === Usage
 
 You begin your command-line script by writing a spec for its options, layed out
 like a Unix manual page. This spec will be used to parse input and to generate
-help text using the --help flag. This example demonstrates a wide range of the
-spec API. You can use as much or as little of it as you like, none of the fields
+help text using the <tt>--help</tt> flag. This example demonstrates a wide range of
+the spec API. You can use as much or as little of it as you like, none of the fields
 are required.
 
   require 'rubygems'
@@ -45,19 +50,21 @@ are required.
     EOS
     
     flag    :verbose,   :default => false,
-    :desc => 'Print verbose output'
+            :desc => 'Print verbose output'
     
     flag    :recurse,   :default => true,
-    :desc => 'Enter directories recursively'
+            :desc => 'Enter directories recursively'
+    
+    shortcut :all, '--verbose --recurse'
     
     string  :type,      :default => 'f',
-    :desc => 'Which type of files to move'
+            :desc => 'Which type of files to move'
     
     integer :status,    :default => 200,
-    :desc => 'Tell the program the status code to return'
+            :desc => 'Tell the program the status code to return'
     
     float   :quality,   :default => 0.5,
-    :desc => 'Level of compression loss incurred when copying'
+            :desc => 'Level of compression loss incurred when copying'
     
     glob    :files,     :desc => <<-EOS
     Pattern for selecting which files to move. For example, to select all the
@@ -87,8 +94,8 @@ are required.
   end
 
 Having defined your spec, you can use it to parse user input. Input is specified
-as an array of string tokens, and defaults to ARGV. If the program is invoked using
---help, Oyster will throw a <tt>Oyster::HelpRendered</tt> exception that you can
+as an array of string tokens, and defaults to +ARGV+. If the program is invoked using
+<tt>--help</tt>, Oyster will throw a <tt>Oyster::HelpRendered</tt> exception that you can
 use to halt your program if necessary. An example taking input from the command
 line:
 
@@ -104,6 +111,10 @@ as specified by the user. For example:
   
   Input:    --no-recurse
   Oupput:   opts[:recurse] == false
+  
+  Input:    --all
+  Output    options[:verbose] == true
+            options[:recurse] == true
   
   Input:    --dest /path/to/mydir
   Output:   opts[:dest] == '/path/to/mydir'
@@ -136,6 +147,7 @@ glob before handing it to the Ruby interpreter.
             -- Oyster will call Dir.glob('**/*.rb')
                opts[:files] == ['foo.rb', 'bar.rb', 'dir/baz.rb', ...]
 
+
 === Unclaimed input
 
 Any input tokens not absorbed by one of the option flags will be written to an
@@ -145,6 +157,7 @@ array in <tt>opts[:unclaimed]</tt>:
   Output:   opts[:sources] == ['foo.rb', 'bar.rb']
             opts[:dest] == '/path/to/dir'
             opts[:unclaimed] == ['some_arg']
+
 
 === Subcommands
 
@@ -179,14 +192,6 @@ Subcommand options are stored as a hash inside the main options hash:
 Beware that you cannot give a subcommand the same name as an option flag,
 otherwise you'll get a name collision in the output.
 
-=== Requirements
-
-* Rubygems
-* Oyster gem
-
-=== Installation
-
-  sudo gem install oyster
 
 === License
 

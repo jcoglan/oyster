@@ -195,7 +195,7 @@ class OysterTest < Test::Unit::TestCase
   
   def test_file
     opts = @spec.parse %w(--path Rakefile)
-    assert opts[:path] =~ /Oyster::VERSION/
+    assert opts[:path] =~ /Hoe/
   end
   
 end
