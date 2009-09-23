@@ -1,5 +1,5 @@
 module Oyster
-  VERSION = '0.9.2'
+  VERSION = '0.9.3'
   
   LONG_NAME   = /^--([a-z\[][a-z0-9\]\-]+)$/i
   SHORT_NAME  = /^-([a-z0-9]+)$/i

@@ -45,8 +45,10 @@ module Oyster
     end
     
     def parse(input = ARGV)
-      input = input.dup
       output = {:unclaimed => []}
+      return output if input.nil?
+      
+      input = input.dup
       
       while token = input.shift
         if token == STOP_FLAG
