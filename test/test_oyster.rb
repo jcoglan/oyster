@@ -124,6 +124,11 @@ class OysterTest < Test::Unit::TestCase
     assert_equal 'help.txt, cmd.rb', opts[:files].join(', ')
   end
   
+  def test_equals_separator
+    opts = @spec.parse %w(--user=danlucraft)
+    assert_equal 'danlucraft', opts[:user]
+  end
+  
   def test_strings
     opts = @spec.parse %w(-v --user jcoglan something)
     assert_equal 'jcoglan', opts[:user]

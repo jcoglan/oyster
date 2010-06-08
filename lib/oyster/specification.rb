@@ -58,10 +58,18 @@ module Oyster
         
         option = command(token)
         
-        long, short = token.scan(LONG_NAME), token.scan(SHORT_NAME)
-        long, short = [long, short].map { |s| s.flatten.first }
+        long, long_eq, short = *[LONG_NAME, LONG_NAME_EQ, SHORT_NAME].map { |re| token.scan(re).flatten.first }
         
-        input = short.scan(/./).map { |s| "-#{s}" } + input and next if short and short.size > 1
+        if short and short.size > 1
+          input = short.scan(/./).map { |s| "-#{s}" } + input
+          next
+        end
+        
+        if long_eq
+          parts = long_eq.split('=')
+          long = parts.shift
+          input.unshift(parts * '=')
+        end
         
         negative = !!(long && long =~ NEGATOR)
         long.sub!(NEGATOR, '') if negative

@@ -1,3 +1,8 @@
+=== 0.9.4 / 2010-06-08
+
+* Make Dan happy and support '=' as an argument separator.
+
+
 === 0.9.3 / 2009-09-23
 
 * Specification#parse() responds to nil input with an empty options hash.

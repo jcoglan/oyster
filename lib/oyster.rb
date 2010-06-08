@@ -1,14 +1,15 @@
 module Oyster
-  VERSION = '0.9.3'
+  VERSION = '0.9.4'
   
-  LONG_NAME   = /^--([a-z\[][a-z0-9\]\-]+)$/i
-  SHORT_NAME  = /^-([a-z0-9]+)$/i
+  LONG_NAME     = /^--([a-z\[][a-z0-9\]\-]+)$/i
+  LONG_NAME_EQ  = /^--([a-z\[][a-z0-9\]\-]+=.*)$/i
+  SHORT_NAME    = /^-([a-z0-9]+)$/i
   
-  HELP_INDENT = 7
-  HELP_WIDTH  = 80
+  HELP_INDENT   = 7
+  HELP_WIDTH    = 80
   
-  STOP_FLAG   = '--'
-  NEGATOR     = /^no-/
+  STOP_FLAG     = '--'
+  NEGATOR       = /^no-/
   
   WINDOWS = RUBY_PLATFORM.split('-').any? { |part| part =~ /mswin\d*/i }
   
