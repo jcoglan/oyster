@@ -1,3 +1,8 @@
+=== 0.9.5 / 2011-07-19
+
+* Remove dependency on Hoe and Rubyforge.
+
+
 === 0.9.4 / 2010-06-08
 
 * Make Dan happy and support '=' as an argument separator.
@@ -21,7 +26,7 @@
 
 === 0.9.0 / 2008-07-17
 
-* Initial release. Includes option parsing for flags, strings, ints,
-  floats, globs, files, shortcuts and subcommands. Automatically
-  renders man-page-style help to stdout with the -h flag.
+* Initial release. Includes option parsing for flags, strings, ints, floats,
+  globs, files, shortcuts and subcommands. Automatically renders man-page-style
+  help to stdout with the -h flag.
 
