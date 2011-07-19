@@ -1,6 +1,4 @@
 module Oyster
-  VERSION = '0.9.4'
-  
   LONG_NAME     = /^--([a-z\[][a-z0-9\]\-]+)$/i
   LONG_NAME_EQ  = /^--([a-z\[][a-z0-9\]\-]+=.*)$/i
   SHORT_NAME    = /^-([a-z0-9]+)$/i
@@ -13,7 +11,7 @@ module Oyster
   
   WINDOWS = RUBY_PLATFORM.split('-').any? { |part| part =~ /mswin\d*/i }
   
-  class HelpRendered < StandardError; end
+  class HelpRendered < StandardError ; end
   
   def self.spec(*args, &block)
     spec = Specification.new
@@ -25,20 +23,18 @@ module Oyster
   def self.is_name?(string)
     !string.nil? and !!(string =~ LONG_NAME || string =~ SHORT_NAME || string == STOP_FLAG)
   end
+  
+  ROOT = File.expand_path('..', __FILE__)
+  
+  require ROOT + '/oyster/specification'
+  require ROOT + '/oyster/option'
+  require ROOT + '/oyster/options/flag'
+  require ROOT + '/oyster/options/string'
+  require ROOT + '/oyster/options/integer'
+  require ROOT + '/oyster/options/float'
+  require ROOT + '/oyster/options/file'
+  require ROOT + '/oyster/options/array'
+  require ROOT + '/oyster/options/glob'
+  require ROOT + '/oyster/options/shortcut'
+  require ROOT + '/oyster/options/subcommand'
 end
-
-[ 'specification',
-  'option',
-  'options/flag',
-  'options/string',
-  'options/integer',
-  'options/float',
-  'options/file',
-  'options/array',
-  'options/glob',
-  'options/shortcut',
-  'options/subcommand'
-].each do |file|
-  require File.dirname(__FILE__) + '/oyster/' + file
-end
-

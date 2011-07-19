@@ -1,5 +1,8 @@
+require 'rubygems'
+require 'bundler/setup'
 require 'test/unit'
-require 'oyster'
+
+require File.dirname(__FILE__) + '/../lib/oyster'
 
 class OysterTest < Test::Unit::TestCase
   
@@ -180,7 +183,7 @@ class OysterTest < Test::Unit::TestCase
   
   def test_globs
     opts = @spec.parse %w(add --filelist ./*.txt)
-    assert_equal './History.txt, ./Manifest.txt, ./README.txt', opts[:add][:filelist].sort.join(', ')
+    assert_equal './History.txt', opts[:add][:filelist].sort.join(', ')
   end
   
   def test_subcommands
@@ -199,8 +202,8 @@ class OysterTest < Test::Unit::TestCase
   end
   
   def test_file
-    opts = @spec.parse %w(--path Rakefile)
-    assert opts[:path] =~ /Hoe/
+    opts = @spec.parse %w(--path README.rdoc)
+    assert opts[:path] =~ /License/
   end
   
 end
