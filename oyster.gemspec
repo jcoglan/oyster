@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name              = "oyster"
   s.version           = "0.9.5"
-  s.summary           = "command-line input parser that doesn't hate you"
+  s.summary           = "Command-line input parser that doesn't hate you"
   s.author            = "James Coglan"
   s.email             = "jcoglan@gmail.com"
   s.homepage          = "http://github.com/jcoglan/oyster"
