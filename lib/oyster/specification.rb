@@ -134,7 +134,7 @@ module Oyster
                    x = Curses.cols
                    Curses.close_screen
                    x
-                 rescue
+                 rescue LoadError
                    HELP_WIDTH
                  end
       @width - HELP_INDENT
